@@ -30,3 +30,8 @@ void goodbye_handler(char *response, size_t response_size)
 {
     snprintf(response, response_size, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nGoodbye, World!");
 }
+
+void main_handler(char *response, size_t response_size)
+{
+    snprintf(response, response_size, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nWelcome to the Main Page!");
+}
