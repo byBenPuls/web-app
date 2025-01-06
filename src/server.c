@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 #include <winsock2.h>
 #include "server.h"
+#include "http.h"
 
-#pragma comment(lib, "Ws2_32.lib")
+// #pragma comment(lib, "Ws2_32.lib")
 
 void handle_client(SOCKET client_socket, Router *router)
 {
     char buffer[1024];
-    char response[1024];
     int bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
     if (bytes_received < 0)
     {
@@ -19,18 +20,22 @@ void handle_client(SOCKET client_socket, Router *router)
     }
 
     buffer[bytes_received] = '\0';
-    printf("Received request:\n%s\n", buffer);
+    Request request;
+    parse_request(buffer, &request);
 
-    char *method = strtok(buffer, " ");
-    char *path = strtok(NULL, " ");
-    if (path != NULL)
-    {
-        path++;
-    }
+    Response response = handle_request(router, &request);
 
-    handle_request(router, path, response, sizeof(response));
+    char http_response[2048];
+    snprintf(http_response, sizeof(http_response),
+             "HTTP/1.1 %s\r\n%s\nContent-Length: %zu\r\n\r\n%s",
+             response.status, response.headers, strlen(response.body), response.body);
 
-    send(client_socket, response, strlen(response), 0);
+    // Отправка ответа клиенту
+    send(client_socket, http_response, strlen(http_response), 0);
+
+    // clean unused data
+    free_response(&response);
+    // free_router(&router);
 
     closesocket(client_socket);
 }
@@ -76,12 +81,17 @@ void start_server(int port, Router *router)
         exit(EXIT_FAILURE);
     }
 
-    printf("Server is listening on port %d\n", port);
+    printf("Server is running "
+           "\x1b[32m"
+           "http://127.0.0.1:%d"
+           "\x1b[0m"
+           "\n",
+           port);
 
     while (1)
     {
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
-        if (client_socket < 0)
+        if (client_socket == INVALID_SOCKET)
         {
             perror("Accept failed");
             continue;
