@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+    command: |
+      sh entrypoint.sh
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+    networks:
+      - app_network
+networks:
+  app_network:
+    driver: bridge
