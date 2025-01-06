@@ -1,4 +1,5 @@
 #include "router.h"
+#include "http.h"
 
 Router *create_router()
 {
@@ -7,28 +8,39 @@ Router *create_router()
     return router;
 }
 
-void add_route(Router *router, const char *path, Handler handler)
+void add_route(Router *router, const char *method, const char *path, Handler handler)
 {
     Route *new_route = (Route *)malloc(sizeof(Route));
     new_route->path = strdup(path);
+    new_route->method = strdup(method);
     new_route->handler = handler;
     new_route->next = router->head;
     router->head = new_route;
 }
 
-void handle_request(Router *router, const char *path, char *response, size_t response_size)
+Response handle_request(Router *router, Request *request)
 {
     Route *current = router->head;
     while (current != NULL)
     {
-        if (strcmp(current->path, path) == 0)
+        if (strcmp(current->path, request->path) == 0)
         {
-            current->handler(response, response_size); // Передаем буфер ответа
-            return;
+            if (strcmp(current->method, request->method) == 0 || strcmp(current->method, "*") == 0)
+            {
+                return current->handler(request); // Передаем буфер ответа
+            }
+            return create_response(
+                "405 Method Not Allowed",
+                "Content-Type: text/plain",
+                "⚠️⚠️⚠️⚠️ не тот метод ты выбрал.."
+            );
         }
         current = current->next;
     }
-    snprintf(response, response_size, "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\n404 Not Found");
+    return create_response("404 Not Found",
+    "Content-Type: text/plain",
+    "404 Not Found"
+    );
 }
 
 void free_router(Router *router)
