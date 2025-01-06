@@ -4,9 +4,6 @@
 
 Response hello_handler(Request *request)
 {
-    printf("TOPTOPTOPTP: %s\n", request->method);
-    // http_get("https://wb-bot.ercode.ru", "/");
-    // Создание ответа
     return create_response(
         "200 OK",
         "Content-Type: text/html",
