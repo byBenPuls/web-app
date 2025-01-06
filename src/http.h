@@ -27,9 +27,18 @@ typedef struct
     char *body;
 } Response;
 
+typedef struct
+{
+    char *status;
+    char *headers;
+    char *json;
+} JsonResponse;
+
 int parse_request(const char *request_str, Request *request);
 
 Response create_response(const char *status, const char *headers, const char *body);
+Response create_json_response(const char *status, const char *headers, const char *json);
 void free_response(Response *response);
+void free_json_response(JsonResponse *response);
 
 #endif

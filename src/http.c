@@ -44,6 +44,29 @@ Response create_response(const char *status, const char *headers, const char *bo
     return response;
 }
 
+Response create_json_response(const char *status, const char *headers, const char *json)
+{
+    char type[2048] = "Content-Type: application/json";
+    char modified_headers[2048];
+    if (strcmp(headers, "") == 0)
+    {
+        strcpy(modified_headers, type);
+    }
+    else
+    {
+        strcpy(modified_headers, strcat(type, "\r\n"));
+        strcat(modified_headers, headers);
+    }
+    return create_response(status, modified_headers, json);
+}
+
+void free_json_response(JsonResponse *json_response)
+{
+    free(json_response->status);
+    free(json_response->headers);
+    free(json_response->json);
+}
+
 void free_response(Response *response)
 {
     free(response->status);
