@@ -2,9 +2,10 @@
 #define HANDLERS_H
 
 #include <stdio.h>
+#include "http.h"
 
-void hello_handler(char *response, size_t response_size);
-void goodbye_handler(char *response, size_t response_size);
-void main_handler(char *response, size_t response_size);
+Response hello_handler(Request *request);
+Response goodbye_handler(Request *request);
+Response main_handler(Request *request);
 
 #endif // HANDLERS_H
