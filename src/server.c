@@ -1,105 +1,106 @@
+#include "server.h"
+#include "http.h"
+#include <arpa/inet.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stddef.h>
-#include <winsock2.h>
-#include "server.h"
-#include "http.h"
+#include <sys/socket.h>
+#include <unistd.h>
 
-// #pragma comment(lib, "Ws2_32.lib")
+#define BUFFER_SIZE 1048576
 
-void handle_client(SOCKET client_socket, Router *router)
+typedef struct
 {
-    char buffer[1024];
-    int bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
-    if (bytes_received < 0)
+    int client_fd;
+    Router *router;
+} ClientArgs;
+
+void *client_handler(void *arg)
+{
+    ClientArgs *client_args = (ClientArgs *)arg;
+    int client_fd = client_args->client_fd;
+    Router *router = client_args->router;
+
+    free(client_args);
+
+    char *buffer = malloc(BUFFER_SIZE);
+    ssize_t bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
+    if (bytes_received > 0)
     {
-        perror("recv failed");
-        closesocket(client_socket);
-        return;
+        buffer[bytes_received] = '\0';
+
+        Request request;
+        parse_request(buffer, &request);
+
+        Response response = handle_request(router, &request);
+
+        char http_response[BUFFER_SIZE];
+        snprintf(http_response, sizeof(http_response),
+                 "HTTP/1.1 %s\r\n%s\r\nContent-Length: %zu\r\n\r\n%s",
+                 response.status, response.headers, strlen(response.body), response.body);
+
+        send(client_fd, http_response, strlen(http_response), 0);
+
+        free_response(&response);
     }
 
-    buffer[bytes_received] = '\0';
-    Request request;
-    parse_request(buffer, &request);
-
-    Response response = handle_request(router, &request);
-
-    char http_response[2048];
-    snprintf(http_response, sizeof(http_response),
-             "HTTP/1.1 %s\r\n%s\nContent-Length: %zu\r\n\r\n%s",
-             response.status, response.headers, strlen(response.body), response.body);
-
-    // Отправка ответа клиенту
-    send(client_socket, http_response, strlen(http_response), 0);
-
-    // clean unused data
-    free_response(&response);
-    // free_router(&router);
-
-    closesocket(client_socket);
+    free(buffer);
+    close(client_fd);
+    return NULL;
 }
 
-void start_server(int port, Router *router)
+void start_server(int port, const char *ip, Router *router)
 {
-    WSADATA wsaData;
-    SOCKET server_socket, client_socket;
-    struct sockaddr_in server_addr, client_addr;
-    int addr_len = sizeof(client_addr);
+    int server_fd;
+    struct sockaddr_in server_addr;
 
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        perror("WSAStartup failed");
-        exit(EXIT_FAILURE);
-    }
-
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_socket == INVALID_SOCKET)
-    {
-        perror("Socket creation failed");
-        WSACleanup();
+        perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    if (inet_pton(AF_INET, ip, &server_addr.sin_addr) <= 0)
+    {
+        perror("invalid IP address");
+        exit(EXIT_FAILURE);
+    }
     server_addr.sin_port = htons(port);
 
-    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
-        perror("Bind failed");
-        closesocket(server_socket);
-        WSACleanup();
+        perror("bind failed");
         exit(EXIT_FAILURE);
     }
 
-    if (listen(server_socket, 5) < 0)
+    if (listen(server_fd, 10) < 0)
     {
-        perror("Listen failed");
-        closesocket(server_socket);
-        WSACleanup();
+        perror("listen failed");
         exit(EXIT_FAILURE);
     }
 
-    printf("Server is running "
-           "\x1b[32m"
-           "http://127.0.0.1:%d"
-           "\x1b[0m"
-           "\n",
-           port);
-
+    printf("Server listening on %s:%d\n", ip, port);
     while (1)
     {
-        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
-        if (client_socket == INVALID_SOCKET)
+        struct sockaddr_in client_addr;
+        socklen_t client_addr_len = sizeof(client_addr);
+        int client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+        if (client_fd < 0)
         {
-            perror("Accept failed");
+            perror("accept failed");
             continue;
         }
 
-        handle_client(client_socket, router);
+        ClientArgs *client_args = malloc(sizeof(ClientArgs));
+        client_args->client_fd = client_fd;
+        client_args->router = router;
+
+        pthread_t thread_id;
+        pthread_create(&thread_id, NULL, client_handler, (void *)client_args);
+        pthread_detach(thread_id);
     }
 
-    closesocket(server_socket);
-    WSACleanup();
+    close(server_fd);
 }
