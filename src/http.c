@@ -5,36 +5,34 @@
 
 int parse_request(const char *request_str, Request *request)
 {
-    char *request_copy = strdup(request_str); // Создаем копию строки запроса
+    char *request_copy = strdup(request_str);
     if (!request_copy)
     {
-        return -1; // Ошибка выделения памяти
+        return -1;
     }
 
-    char *line = strtok(request_copy, "\r\n"); // Разделяем по строкам
+    char *line = strtok(request_copy, "\r\n");
 
-    // Парсим первую строку (метод и путь)
     if (sscanf(line, "%s %s", request->method, request->path) != 2)
     {
         free(request_copy);
-        return -1; // Ошибка парсинга
+        return -1;
     }
 
     request->header_count = 0;
 
-    // Парсим остальные строки (заголовки)
     while ((line = strtok(NULL, "\r\n")) != NULL)
     {
         if (request->header_count < MAX_HEADER_COUNT)
         {
             strncpy(request->headers[request->header_count], line, MAX_HEADER_LENGTH - 1);
-            request->headers[request->header_count][MAX_HEADER_LENGTH - 1] = '\0'; // Обеспечиваем нуль-терминацию
+            request->headers[request->header_count][MAX_HEADER_LENGTH - 1] = '\0';
             request->header_count++;
         }
     }
 
-    free(request_copy); // Освобождаем память
-    return 0;           // Успех
+    free(request_copy);
+    return 0;
 }
 
 Response create_response(const char *status, const char *headers, const char *body)
