@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -g -lws2_32
 
 TARGET = application
 
-SRCS = main.c src/router.c src/handlers.c src/server.c
+SRCS = main.c src/router.c src/handlers.c src/server.c src/http.c
 
 OBJS = $(SRCS:.c=.o)
 
