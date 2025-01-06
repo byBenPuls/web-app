@@ -1,8 +1,8 @@
-#ifndef HTTP_SERVER_H
-#define HTTP_SERVER_H
+#ifndef SERVER_H
+#define SERVER_H
 
 #include "router.h"
 
-void start_server(int port, Router *router);
+void start_server(int port, const char *ip, Router *router);
 
-#endif // HTTP_SERVER_H
+#endif // SERVER_H
