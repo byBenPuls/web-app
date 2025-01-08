@@ -13,7 +13,7 @@ int parse_request(const char *request_str, Request *request)
 
     char *line = strtok(request_copy, "\r\n");
 
-    if (sscanf(line, "%s %s", request->method, request->path) != 2)
+    if (sscanf(line, "%15s %255s", request->method, request->path) != 2)
     {
         free(request_copy);
         return -1;
