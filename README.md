@@ -2,7 +2,7 @@
 A simple web application on ~~Fortran~~ C for linux/unix.
 
 ![Main page screenshot](assets/image.png)
-
+##
 ### Philosophy
 
 * The goal of this project is to understand whether the use of C language is relevant in web development
