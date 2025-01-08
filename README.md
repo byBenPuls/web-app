@@ -1,20 +1,16 @@
-# Web-app
-A simple web application on ~~Fortran~~ C for windows.
+# Web Application
+A simple web application on ~~Fortran~~ C for linux/unix.
 
+![Main page screenshot](assets/image.png)
 
-### How to setup?
+### Philosophy
 
-First, download C compiler (GCC for example). Then, check `Ws2_32.lib` and `winsock2`.
-After that, you can deploy server:
+* The goal of this project is to understand whether the use of C language is relevant in web development
 
-```bash
->>> make
-```
+### How to run?
 
-Finally, you compiled server. You can run the server:
+Use docker compose for deploy:
 
 ```bash
->>> .\application.exe
+make run
 ```
-
-Server will be available on **127.0.0.1:8080**.
