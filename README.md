@@ -4,6 +4,7 @@ A simple web application on ~~Fortran~~ C for linux/unix.
 
 ## 👀 Preview
 ![Main page screenshot](assets/image.png)
+![404 page screenshot](assets/404.png)
 ##
 ## 📚 Philosophy
 
