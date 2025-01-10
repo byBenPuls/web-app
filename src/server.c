@@ -171,5 +171,5 @@ void start_server(int port, const char *ip, Router *router)
 
     close(epoll_fd);
     close(server_fd);
-    printf("Server shut down gracefully.\n");
+    printf("\nServer shut down gracefully.\n");
 }
