@@ -1,0 +1,75 @@
+#ifndef HTTP_STATUS_CODES_H
+#define HTTP_STATUS_CODES_H
+
+#define HTTP_100_CONTINUE "100 Continue"
+#define HTTP_101_SWITCHING_PROTOCOLS "101 Switching Protocols"
+#define HTTP_102_PROCESSING "102 Processing"
+
+#define HTTP_200_OK "200 OK"
+#define HTTP_201_CREATED "201 Created"
+#define HTTP_202_ACCEPTED "202 Accepted"
+#define HTTP_203_NON_AUTHORITATIVE_INFORMATION                                 \
+	"203 Non-Authoritative Information"
+#define HTTP_204_NO_CONTENT "204 No Content"
+#define HTTP_205_RESET_CONTENT "205 Reset Content"
+#define HTTP_206_PARTIAL_CONTENT "206 Partial Content"
+#define HTTP_207_MULTI_STATUS "207 Multi-Status"
+#define HTTP_208_ALREADY_REPORTED "208 Already Reported"
+#define HTTP_226_IM_USED "226 IM Used"
+
+#define HTTP_300_MULTIPLE_CHOICES "300 Multiple Choices"
+#define HTTP_301_MOVED_PERMANENTLY "301 Moved Permanently"
+#define HTTP_302_FOUND "302 Found"
+#define HTTP_303_SEE_OTHER "303 See Other"
+#define HTTP_304_NOT_MODIFIED "304 Not Modified"
+#define HTTP_305_USE_PROXY "305 Use Proxy"
+#define HTTP_307_TEMPORARY_REDIRECT "307 Temporary Redirect"
+#define HTTP_308_PERMANENT_REDIRECT "308 Permanent Redirect"
+
+#define HTTP_400_BAD_REQUEST "400 Bad Request"
+#define HTTP_401_UNAUTHORIZED "401 Unauthorized"
+#define HTTP_402_PAYMENT_REQUIRED "402 Payment Required"
+#define HTTP_403_FORBIDDEN "403 Forbidden"
+#define HTTP_404_NOT_FOUND "404 Not Found"
+#define HTTP_405_METHOD_NOT_ALLOWED "405 Method Not Allowed"
+#define HTTP_406_NOT_ACCEPTABLE "406 Not Acceptable"
+#define HTTP_407_PROXY_AUTHENTICATION_REQUIRED                                 \
+	"407 Proxy Authentication Required"
+#define HTTP_408_REQUEST_TIMEOUT "408 Request Timeout"
+#define HTTP_409_CONFLICT "409 Conflict"
+#define HTTP_410_GONE "410 Gone"
+#define HTTP_411_LENGTH_REQUIRED "411 Length Required"
+#define HTTP_412_PRECONDITION_FAILED "412 Precondition Failed"
+#define HTTP_413_PAYLOAD_TOO_LARGE "413 Payload Too Large"
+#define HTTP_414_URI_TOO_LONG "414 URI Too Long"
+#define HTTP_415_UNSUPPORTED_MEDIA_TYPE "415 Unsupported Media Type"
+#define HTTP_416_RANGE_NOT_SATISFIABLE "416 Range Not Satisfiable"
+#define HTTP_417_EXPECTATION_FAILED "417 Expectation Failed"
+#define HTTP_418_IM_A_TEAPOT "418 I'm a teapot"
+#define HTTP_421_MISDIRECTED_REQUEST "421 Misdirected Request"
+#define HTTP_422_UNPROCESSABLE_ENTITY "422 Unprocessable Entity"
+#define HTTP_423_LOCKED "423 Locked"
+#define HTTP_424_FAILED_DEPENDENCY "424 Failed Dependency"
+#define HTTP_425_TOO_EARLY "425 Too Early"
+#define HTTP_426_UPGRADE_REQUIRED "426 Upgrade Required"
+#define HTTP_428_PRECONDITION_REQUIRED "428 Precondition Required"
+#define HTTP_429_TOO_MANY_REQUESTS "429 Too Many Requests"
+#define HTTP_431_REQUEST_HEADER_FIELDS_TOO_LARGE                               \
+	"431 Request Header Fields Too Large"
+#define HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS                                 \
+	"451 Unavailable For Legal Reasons"
+
+#define HTTP_500_INTERNAL_SERVER_ERROR "500 Internal Server Error"
+#define HTTP_501_NOT_IMPLEMENTED "501 Not Implemented"
+#define HTTP_502_BAD_GATEWAY "502 Bad Gateway"
+#define HTTP_503_SERVICE_UNAVAILABLE "503 Service Unavailable"
+#define HTTP_504_GATEWAY_TIMEOUT "504 Gateway Timeout"
+#define HTTP_505_HTTP_VERSION_NOT_SUPPORTED "505 HTTP Version Not Supported"
+#define HTTP_506_VARIANT_ALSO_NEGOTIATES "506 Variant Also Negotiates"
+#define HTTP_507_INSUFFICIENT_STORAGE "507 Insufficient Storage"
+#define HTTP_508_LOOP_DETECTED "508 Loop Detected"
+#define HTTP_510_NOT_EXTENDED "510 Not Extended"
+#define HTTP_511_NETWORK_AUTHENTICATION_REQUIRED                               \
+	"511 Network Authentication Required"
+
+#endif
