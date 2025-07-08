@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -g
 
 TARGET = application
 
-SRCS = main.c src/router.c src/handlers.c src/server.c src/http.c
+SRCS = main.c src/router.c src/handlers.c src/server.c src/http.c src/page_reader.c
 
 OBJS = $(SRCS:.c=.o)
 

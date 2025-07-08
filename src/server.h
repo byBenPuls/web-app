@@ -5,4 +5,4 @@
 
 void start_server(int port, const char *ip, Router *router);
 
-#endif // SERVER_H
+#endif
