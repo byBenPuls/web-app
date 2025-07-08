@@ -10,8 +10,6 @@
 #define MAX_HEADER_COUNT 50
 #define MAX_HEADER_LENGTH 256
 
-const char *get_http_status_message(int status_code);
-
 typedef struct {
 	char method[MAX_METHOD_LENGTH];
 	char path[MAX_PATH_LENGTH];
