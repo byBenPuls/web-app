@@ -12,39 +12,35 @@
 
 const char *get_http_status_message(int status_code);
 
-typedef struct
-{
-    char method[MAX_METHOD_LENGTH];
-    char path[MAX_PATH_LENGTH];
-    char headers[MAX_HEADER_COUNT][MAX_HEADER_LENGTH];
-    int header_count;
+typedef struct {
+	char method[MAX_METHOD_LENGTH];
+	char path[MAX_PATH_LENGTH];
+	char headers[MAX_HEADER_COUNT][MAX_HEADER_LENGTH];
+	int header_count;
 } Request;
 
-typedef struct
-{
-    char *status;
-    char *headers;
-    char *body;
+typedef struct {
+	char *status;
+	char *headers;
+	char *body;
 } Response;
 
-
-typedef struct
-{
-    char *file_path;
+typedef struct {
+	char *file_path;
 } StaticFile;
 
-
-typedef struct
-{
-    char *status;
-    char *headers;
-    char *json;
+typedef struct {
+	char *status;
+	char *headers;
+	char *json;
 } JsonResponse;
 
 int parse_request(const char *request_str, Request *request);
 
-Response create_response(const char *status, const char *headers, const char *body);
-Response create_json_response(const char *status, const char *headers, const char *json);
+Response create_response(const char *status, const char *headers,
+						 const char *body);
+Response create_json_response(const char *status, const char *headers,
+							  const char *json);
 void free_response(Response *response);
 void free_request(Request *request);
 void free_json_response(JsonResponse *response);

@@ -1,26 +1,24 @@
-#include <stdio.h>
+#include "src/handlers.h"
 #include "src/router.h"
 #include "src/server.h"
-#include "src/handlers.h"
+#include <stdio.h>
 
 const int APP_PORT = 8080;
 const char *APP_HOST = "0.0.0.0";
 
-void include_routers(Router *router)
-{
-    add_route(router, "*", "/hello", hello_handler);
-    add_route(router, "*", "/goodbye", goodbye_handler);
-    add_route(router, "*", "/", main_handler);
-    add_route(router, "GET", "/json", json_handler);
+void include_routers(Router *router) {
+	add_route(router, "*", "/hello", hello_handler);
+	add_route(router, "*", "/goodbye", goodbye_handler);
+	add_route(router, "*", "/", main_handler);
+	add_route(router, "GET", "/json", json_handler);
 }
 
-int main()
-{
-    Router *router = create_router();
-    include_routers(router);
+int main() {
+	Router *router = create_router();
+	include_routers(router);
 
-    start_server(APP_PORT, APP_HOST, router);
+	start_server(APP_PORT, APP_HOST, router);
 
-    free_router(router);
-    return 0;
+	free_router(router);
+	return 0;
 }
