@@ -1,7 +1,7 @@
 #include "router.h"
 #include "http.h"
-#include "http/statuses.h"
 #include "page_reader.h"
+#include "status.h"
 #include "string.h"
 
 Router *create_router() {

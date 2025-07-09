@@ -1,9 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -g -lpthread
 
 TARGET = application
 
-SRCS = main.c src/router.c src/handlers.c src/server.c src/http.c src/page_reader.c
+SRCS = main.c src/http/router.c src/handlers.c src/http/server.c src/http/http.c src/http/page_reader.c
 
 OBJS = $(SRCS:.c=.o)
 

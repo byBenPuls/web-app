@@ -8,7 +8,7 @@
 #define MAX_METHOD_LENGTH 10
 #define MAX_PATH_LENGTH 1024
 #define MAX_HEADER_COUNT 50
-#define MAX_HEADER_LENGTH 256
+#define MAX_HEADER_LENGTH 4096
 
 typedef struct {
 	char method[MAX_METHOD_LENGTH];
@@ -17,9 +17,15 @@ typedef struct {
 	int header_count;
 } Request;
 
+typedef struct Header {
+	char *key;
+	char *value;
+} Header;
+
 typedef struct {
 	char *status;
-	char *headers;
+	Header *headers;
+	int headers_count;
 	char *body;
 } Response;
 
@@ -42,5 +48,6 @@ Response create_json_response(const char *status, const char *headers,
 void free_response(Response *response);
 void free_request(Request *request);
 void free_json_response(JsonResponse *response);
+char *assemble_header(Header *header);
 
 #endif

@@ -1,3 +1,5 @@
-- [ ] add static files support (html, css, js, fonts)
+- [x] add static files support (html, css, js, fonts)
 
-- [ ] add async handling
+- [x] add async handling
+
+- [] add headers and cookies
