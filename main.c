@@ -1,6 +1,6 @@
 #include "src/handlers.h"
-#include "src/router.h"
-#include "src/server.h"
+#include "src/http/router.h"
+#include "src/http/server.h"
 #include <stdio.h>
 
 const int APP_PORT = 8080;

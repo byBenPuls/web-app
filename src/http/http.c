@@ -1,5 +1,5 @@
 #include "http.h"
-#include "http/statuses.h"
+#include "status.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,14 +33,37 @@ int parse_request(const char *request_str, Request *request) {
 	return 0;
 }
 
+void add_header(Header ***headers, int *count, Header *header) {
+	*headers = realloc(*headers, (*count + 1) * sizeof(Header *));
+
+	Header *new_header = malloc(MAX_HEADER_LENGTH);
+
+	new_header->key = strdup(header->key);
+	new_header->value = strdup(header->value);
+
+	(*headers)[*count] = new_header;
+	(*count)++;
+}
+
 Response create_response(const char *status, const char *headers,
 						 const char *body) {
-	if (body == NULL || status == NULL || headers == NULL) {
+	if (1 || body == NULL || status == NULL || headers == NULL) {
 		printf("Internal service error\n");
 
 		Response error_response;
 		error_response.status = strdup(HTTP_500_INTERNAL_SERVER_ERROR);
-		error_response.headers = strdup("Content-Type: text/html");
+
+		Header **headers = NULL;
+
+		Header content_header = {"Content-Type", "text/html"};
+		Header additional_header = {"X-Api-Key", "1234"};
+		int headers_count = 0;
+
+		add_header(&headers, &headers_count, &content_header);
+		add_header(&headers, &headers_count, &additional_header);
+
+		error_response.headers = *headers;
+		error_response.headers_count = headers_count;
 		error_response.body = strdup("Internal server error");
 		return error_response;
 	}
@@ -76,4 +99,11 @@ void free_response(Response *response) {
 	free(response->status);
 	free(response->headers);
 	free(response->body);
+}
+
+char *assemble_header(Header *header) {
+	char *buffer = malloc(MAX_HEADER_LENGTH + MAX_HEADER_LENGTH);
+	sprintf(buffer, "%s: %s", header->key, header->value);
+
+	return buffer;
 }
